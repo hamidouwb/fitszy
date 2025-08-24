@@ -1,26 +1,38 @@
 const mongoose = require('mongoose')
+const config = require('../utils/config')
 
 const schema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
-    minlength: 5
   },
   lastName: {
     type: String,
     required: true,
-    minlength: 5
   },
   userName: {
     type: String,
     required: true,
-    minlength: 5
+    unique: true,
   },
   email: {
     type: String,
     required: true,
-    minlength: 3
+    unique: true,
   },
+  password: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  avatarKey: {
+    type: String,
+  },
+  avatarUrl: {
+    type: String,
+    default: config.DEFAULT_AVATAR 
+  },
+
   programs: [
     {
       type: mongoose.Schema.Types.ObjectId,
