@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require("../models/user")
 const multer = require("multer")
@@ -26,7 +27,8 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.get('/:id', async (request, response, next) => {
   try {
     const id = request.params.id
-    const user = await User.findById(id)
+    // .populate to Get user and all programs
+    const user = await User.findById(id).populate('programs') 
 
     if(!user) return response.status(404).end()
 
@@ -63,13 +65,16 @@ usersRouter.post('/', upload.single('avatar'), async (request, response, next) =
 
   await s3.send(command)
 
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash(body.password, saltRounds)
+
 
   const user = new User({
     firstName: body.firstName,
     lastName: body.lastName || false,
     userName: body.userName,
     email: body.email,
-    password: body.password,
+    password: passwordHash,
     avatarKey: avatarKey
   })
 

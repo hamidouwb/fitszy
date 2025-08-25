@@ -16,6 +16,10 @@ const schema = new mongoose.Schema({
   mediaUrl: {
     type: String,
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
   workouts: [
     {
       type: mongoose.Schema.Types.ObjectId,
