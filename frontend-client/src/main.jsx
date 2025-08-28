@@ -1,20 +1,19 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-} from '@apollo/client'
+import { Provider } from 'react-redux'
+import { configureStore } from '@reduxjs/toolkit'
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000',
-  cache: new InMemoryCache(),
-})
-
-
+// import programReducder from "./reducers/programReducer"
+//
+// const store = configureStore({
+//   reducer : {
+//     programs: programReducder
+//   }
+// })
 createRoot(document.getElementById('root')).render(
-  <ApolloProvider client={client}>
+
+  // <Provider store={store}>
     <App />
-  </ApolloProvider>,
+  // </Provider>
 )

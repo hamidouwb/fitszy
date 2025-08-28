@@ -32,7 +32,6 @@ const schema = new mongoose.Schema({
     type: String,
     default: config.DEFAULT_AVATAR 
   },
-
   programs: [
     {
       type: mongoose.Schema.Types.ObjectId,

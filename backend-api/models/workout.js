@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
@@ -13,9 +9,22 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  mediaKey: {
+    type: String,
+  },
   mediaUrl: {
     type: String,
   },
+  public: {
+    type: Boolean,
+    default: false
+  },
+  workouts: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Program'
+    }
+  ],
   exercises: [
     {
       type: mongoose.Schema.Types.ObjectId,

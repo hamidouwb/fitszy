@@ -1,10 +1,6 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
   title: {
     type: String,
     required: true,
@@ -13,9 +9,22 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  mediaKey: {
+    type: String,
+  },
   mediaUrl: {
     type: String,
   },
+  public: {
+    type: Boolean,
+    default: false
+  },
+  exercises: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Workout'
+    }
+  ]
 })
 
 // Atlasdb retuns a _id as an object this is to turn it into a string

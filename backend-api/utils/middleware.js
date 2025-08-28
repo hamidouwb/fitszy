@@ -1,4 +1,7 @@
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const User = require('../models/user')
+const config = require('../utils/config')
 
 const requestLogger = (request, response, next) => {
   logger.info('Method:', request.method)
@@ -7,6 +10,30 @@ const requestLogger = (request, response, next) => {
   logger.info('file:  ', request.file)
 
   logger.info('---')
+  next()
+}
+
+// ✨ NEW MIDDLEWARE
+// This should be placed before the errorHandler
+const userExtractor = async (request, response, next) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.startsWith('Bearer ')) {
+    try {
+      const token = authorization.replace('Bearer ', '')
+      const decodedToken = jwt.verify(token, config.SECRET)
+
+      if (!decodedToken.id) {
+        return response.status(401).json({ error: 'token invalid' })
+      }
+      // Attach the user to the request object
+      request.user = await User.findById(decodedToken.id)
+
+    } catch(error) {
+      // Pass JWT errors to the errorHandler
+      return next(error)
+    }
+  }
+  // Call the next middleware in the chain
   next()
 }
 
@@ -35,5 +62,6 @@ const errorHandler = (error, request, response, next) => {
 module.exports = {
   requestLogger,
   unknownEndpoint,
-  errorHandler
+  errorHandler,
+  userExtractor
 }
