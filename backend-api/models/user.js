@@ -28,10 +28,6 @@ const schema = new mongoose.Schema({
   avatarKey: {
     type: String,
   },
-  avatarUrl: {
-    type: String,
-    default: config.DEFAULT_AVATAR 
-  },
   programs: [
     {
       type: mongoose.Schema.Types.ObjectId,

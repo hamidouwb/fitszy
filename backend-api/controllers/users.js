@@ -191,4 +191,27 @@ usersRouter.put('/:id',userExtractor, upload.single('avatar'), async (request, r
   }
 })
 
+// GET fresh avatar URL for a user (for refreshing expired URLs)
+usersRouter.get('/:id/avatar-url', userExtractor, async (request, response, next) => {
+  try {
+    if (request.user.id.toString() !== request.params.id) {
+      return response.status(401).json({ error: 'You can only access your own avatar URL' })
+    }
+
+    const user = await User.findById(request.params.id)
+    if (!user) {
+      return response.status(404).json({ error: 'User not found' })
+    }
+
+    let avatarUrl = config.DEFAULT_AVATAR
+    if (user.avatarKey) {
+      avatarUrl = await s3Service.getFileUrl(user.avatarKey)
+    }
+
+    response.json({ avatarUrl })
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = usersRouter

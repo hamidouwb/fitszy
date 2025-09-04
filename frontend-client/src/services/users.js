@@ -16,4 +16,9 @@ const create = async (newUser) => {
   return response.data
 }
 
-export default { create }
+const getAvatarUrl = async (userId) => {
+  const response = await axios.get(`${baseUrl}/${userId}/avatar-url`)
+  return response.data.avatarUrl
+}
+
+export default { create, getAvatarUrl }
